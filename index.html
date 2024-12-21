@@ -1,4 +1,150 @@
+
+
+
+
+
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Monitoring</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to top, #e3f2fd, #1e88e5);
+            color: #fff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        canvas {
+            max-width: 90%;
+            height: 300px;
+        }
+        .info {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        .status {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Plant Monitoring System</h1>
+    
+    <div class="info">
+        <p>Soil Moisture: <span id="soilMoisture">Loading...</span>%</p>
+        <p>Temperature: <span id="temperature">Loading...</span>°C</p>
+        <p>Humidity: <span id="humidity">Loading...</span>%</p>
+        <p id="healthStatus" class="status">Plant Health: Loading...</p>
+    </div>
+    
+    <div>
+        <h3>Soil Moisture Level</h3>
+        <canvas id="moistureChart"></canvas>
+    </div>
+
+    <div>
+        <h3>Temperature and Humidity</h3>
+        <canvas id="tempHumChart"></canvas>
+    </div>
+
+    <script>
+        // Initialize the moisture chart
+        const moistureCtx = document.getElementById('moistureChart').getContext('2d');
+        const tempHumCtx = document.getElementById('tempHumChart').getContext('2d');
+
+        const moistureChart = new Chart(moistureCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 10 }, (_, i) => `-${10 - i}s`),
+                datasets: [{
+                    label: 'Soil Moisture (%)',
+                    data: Array(10).fill(50), // Starting with default values
+                    borderColor: 'white',
+                    borderWidth: 2,
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { ticks: { color: 'white' } },
+                    y: { ticks: { color: 'white' } }
+                }
+            }
+        });
+
+        const tempHumChart = new Chart(tempHumCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 10 }, (_, i) => `-${10 - i}s`),
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: Array(10).fill(25), // Initial temperature value
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3
+                }, {
+                    label: 'Humidity (%)',
+                    data: Array(10).fill(60), // Initial humidity value
+                    borderColor: 'rgb(54, 162, 235)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { ticks: { color: 'white' } },
+                    y: { ticks: { color: 'white' } }
+                }
+            }
+        });
+
+        // Simulated data fetching (replace with actual API call)
+        setInterval(() => {
+            const moisture = Math.floor(Math.random() * 100);
+            const temperature = Math.floor(Math.random() * 30) + 15; // Random between 15°C and 45°C
+            const humidity = Math.floor(Math.random() * 100); // Random humidity percentage
+            const healthStatus = moisture > 40 && temperature > 15 && temperature < 30 ? 'Healthy' : 'Needs Attention';
+
+            // Update HTML elements
+            document.getElementById('soilMoisture').textContent = moisture;
+            document.getElementById('temperature').textContent = temperature;
+            document.getElementById('humidity').textContent = humidity;
+            document.getElementById('healthStatus').textContent = `Plant Health: ${healthStatus}`;
+
+            // Update charts
+            moistureChart.data.datasets[0].data.push(moisture);
+            moistureChart.data.datasets[0].data.shift();
+            moistureChart.update();
+
+            tempHumChart.data.datasets[0].data.push(temperature);
+            tempHumChart.data.datasets[0].data.shift();
+            tempHumChart.data.datasets[1].data.push(humidity);
+            tempHumChart.data.datasets[1].data.shift();
+            tempHumChart.update();
+        }, 1<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -198,6 +344,159 @@
         }
 
         setInterval(updateDashboard, 1000);
+    </script>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Monitoring</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to top, #e3f2fd, #1e88e5);
+            color: #fff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        canvas {
+            max-width: 90%;
+            height: 300px;
+        }
+        .info {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        .status {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Plant Monitoring System</h1>
+    
+    <div class="info">
+        <p>Soil Moisture: <span id="soilMoisture">Loading...</span>%</p>
+        <p>Temperature: <span id="temperature">Loading...</span>°C</p>
+        <p>Humidity: <span id="humidity">Loading...</span>%</p>
+        <p id="healthStatus" class="status">Plant Health: Loading...</p>
+    </div>
+    
+    <div>
+        <h3>Soil Moisture Level</h3>
+        <canvas id="moistureChart"></canvas>
+    </div>
+
+    <div>
+        <h3>Temperature and Humidity</h3>
+        <canvas id="tempHumChart"></canvas>
+    </div>
+
+    <script>
+        // Initialize the moisture chart
+        const moistureCtx = document.getElementById('moistureChart').getContext('2d');
+        const tempHumCtx = document.getElementById('tempHumChart').getContext('2d');
+
+        const moistureChart = new Chart(moistureCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 10 }, (_, i) => `-${10 - i}s`),
+                datasets: [{
+                    label: 'Soil Moisture (%)',
+                    data: Array(10).fill(50), // Starting with default values
+                    borderColor: 'white',
+                    borderWidth: 2,
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { ticks: { color: 'white' } },
+                    y: { ticks: { color: 'white' } }
+                }
+            }
+        });
+
+        const tempHumChart = new Chart(tempHumCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 10 }, (_, i) => `-${10 - i}s`),
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: Array(10).fill(25), // Initial temperature value
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3
+                }, {
+                    label: 'Humidity (%)',
+                    data: Array(10).fill(60), // Initial humidity value
+                    borderColor: 'rgb(54, 162, 235)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { ticks: { color: 'white' } },
+                    y: { ticks: { color: 'white' } }
+                }
+            }
+        });
+
+        // Simulated data fetching (replace with actual API call)
+        setInterval(() => {
+            const moisture = Math.floor(Math.random() * 100);
+            const temperature = Math.floor(Math.random() * 30) + 15; // Random between 15°C and 45°C
+            const humidity = Math.floor(Math.random() * 100); // Random humidity percentage
+            const healthStatus = moisture > 40 && temperature > 15 && temperature < 30 ? 'Healthy' : 'Needs Attention';
+
+            // Update HTML elements
+            document.getElementById('soilMoisture').textContent = moisture;
+            document.getElementById('temperature').textContent = temperature;
+            document.getElementById('humidity').textContent = humidity;
+            document.getElementById('healthStatus').textContent = `Plant Health: ${healthStatus}`;
+
+            // Update charts
+            moistureChart.data.datasets[0].data.push(moisture);
+            moistureChart.data.datasets[0].data.shift();
+            moistureChart.update();
+
+            tempHumChart.data.datasets[0].data.push(temperature);
+            tempHumChart.data.datasets[0].data.shift();
+            tempHumChart.data.datasets[1].data.push(humidity);
+            tempHumChart.data.datasets[1].data.shift();
+            tempHumChart.update();
+        }, 1000); // Update every second
+    </script>
+</body>
+</html>
+000); // Update every second
     </script>
 </body>
 </html>
